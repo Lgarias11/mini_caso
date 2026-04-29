@@ -1,0 +1,110 @@
+@startuml
+package modelo {
+
+  class Libro {
+    - codigo: String
+    - titulo: String
+    - autor: String
+    - disponible: boolean
+    + Libro(codigo: String, titulo: String, autor: String)
+    + estaDisponible(): boolean
+    + prestar(): void
+    + devolver(): void
+    + getCodigo(): String
+    + getTitulo(): String
+    + getAutor(): String
+    + toString(): String
+  }
+
+  class Usuario {
+    - id: String
+    - nombre: String
+    - correo: String
+    + Usuario(id: String, nombre: String, correo: String)
+    + getId(): String
+    + getNombre(): String
+    + getCorreo(): String
+    + toString(): String
+  }
+
+  class Prestamo {
+    - usuario: Usuario
+    - libro: Libro
+    - fechaPrestamo: LocalDate
+    - fechaDevolucion: LocalDate
+    - activo: boolean
+    + Prestamo(usuario: Usuario, libro: Libro)
+    + finalizar(): void
+    + estaActivo(): boolean
+    + getUsuario(): Usuario
+    + getLibro(): Libro
+    + getFechaPrestamo(): LocalDate
+    + getFechaDevolucion(): LocalDate
+    + toString(): String
+  }
+
+  class Biblioteca {
+    - libros: ArrayList<Libro>
+    - usuarios: ArrayList<Usuario>
+    - prestamos: ArrayList<Prestamo>
+    + Biblioteca()
+    + agregarLibro(libro: Libro): void
+    + agregarUsuario(usuario: Usuario): void
+    + buscarLibroPorCodigo(codigo: String): Libro
+    + buscarUsuarioPorId(id: String): Usuario
+    + registrarPrestamo(idUsuario: String, codigoLibro: String): Prestamo
+    + devolverLibro(codigoLibro: String): void
+    + listarLibros(): ArrayList<Libro>
+    + listarUsuarios(): ArrayList<Usuario>
+    + listarPrestamosActivos(): ArrayList<Prestamo>
+  }
+}
+
+package controlador {
+  class BibliotecaController {
+    - biblioteca: Biblioteca
+    + BibliotecaController()
+    + registrarLibro(codigo: String, titulo: String, autor: String): void
+    + registrarUsuario(id: String, nombre: String, correo: String): void
+    + prestarLibro(idUsuario: String, codigoLibro: String): void
+    + devolverLibro(codigoLibro: String): void
+    + obtenerLibros(): ArrayList<Libro>
+    + obtenerUsuarios(): ArrayList<Usuario>
+    + obtenerPrestamosActivos(): ArrayList<Prestamo>
+  }
+}
+
+package vista {
+  class BibliotecaVista {
+    - controller: BibliotecaController
+    - scanner: Scanner
+    + BibliotecaVista(controller: BibliotecaController)
+    + iniciar(): void
+    - mostrarMenu(): void
+    - registrarLibro(): void
+    - registrarUsuario(): void
+    - prestarLibro(): void
+    - devolverLibro(): void
+    - listarLibros(): void
+    - listarUsuarios(): void
+    - listarPrestamosActivos(): void
+  }
+}
+
+package app {
+  class Main {
+    + main(args: String[]): void
+  }
+}
+
+Biblioteca "1" -- "0..*" Libro
+Biblioteca "1" -- "0..*" Usuario
+Biblioteca "1" -- "0..*" Prestamo
+Prestamo "0..*" -- "1" Usuario
+Prestamo "0..*" -- "1" Libro
+
+Biblioteca ..> Prestamo : crea
+BibliotecaController --> Biblioteca
+BibliotecaVista --> BibliotecaController 
+Main ..> BibliotecaVista : inicia
+@enduml
