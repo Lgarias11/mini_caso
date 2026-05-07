@@ -58,20 +58,24 @@ public class Biblioteca {
         return null;
     }
 
-    public Prestamo registrarPrestamo(String idUsuario, String codigoLibro) {
+    public Prestamo registrarPrestamo(String idUsuario, String codigoLibro) throws EntidadNoEncontradaException, LibroNoDisponibleException {
         Usuario usuario = buscarUsuarioPorId(idUsuario);
         if (usuario == null) {
-            throw new IllegalArgumentException("No existe un usuario registrado con el id " + idUsuario + ".");
+            throw new EntidadNoEncontradaException("El usuario con ID " + idUsuario + " no existe.");
         }
 
         Libro libro = buscarLibroPorCodigo(codigoLibro);
         if (libro == null) {
-            throw new IllegalArgumentException("No existe un libro registrado con el codigo " + codigoLibro + ".");
+            throw new EntidadNoEncontradaException("El libro con código " + codigoLibro + " no existe.");
+        }
+
+        if (!libro.estaDisponible()) {
+            throw new LibroNoDisponibleException("El libro '" + libro.getTitulo() + "' ya está prestado.");
         }
 
         Prestamo prestamo = new Prestamo(usuario, libro);
         prestamos.add(prestamo);
-
+        libro.prestar();
         return prestamo;
     }
 

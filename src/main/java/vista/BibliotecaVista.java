@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import controlador.BibliotecaController;
-import modelo.Libro;
-import modelo.Prestamo;
-import modelo.Usuario;
+import modelo.*;
 
 public class BibliotecaVista {
 
@@ -54,7 +52,8 @@ public class BibliotecaVista {
                     default:
                         System.out.println("Opcion no valida.");
                 }
-            } catch (IllegalArgumentException | IllegalStateException e) {
+            } catch (IllegalArgumentException | IllegalStateException | EntidadNoEncontradaException |
+                     LibroNoDisponibleException e) {
                 System.out.println("Error: " + e.getMessage());
             }
 
@@ -95,7 +94,7 @@ public class BibliotecaVista {
         System.out.println("Usuario registrado correctamente.");
     }
 
-    private void prestarLibro() {
+    private void prestarLibro() throws EntidadNoEncontradaException, LibroNoDisponibleException {
         System.out.println("--- Prestar libro ---");
         String idUsuario = leerTexto("ID del usuario: ");
         String codigoLibro = leerTexto("Codigo del libro: ");

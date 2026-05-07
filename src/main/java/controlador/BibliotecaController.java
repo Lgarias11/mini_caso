@@ -2,10 +2,7 @@ package controlador;
 
 import java.util.ArrayList;
 
-import modelo.Biblioteca;
-import modelo.Libro;
-import modelo.Prestamo;
-import modelo.Usuario;
+import modelo.*;
 
 public class BibliotecaController {
 
@@ -25,7 +22,7 @@ public class BibliotecaController {
         biblioteca.agregarUsuario(usuario);
     }
 
-    public void prestarLibro(String idUsuario, String codigoLibro) {
+    public void prestarLibro(String idUsuario, String codigoLibro) throws EntidadNoEncontradaException, LibroNoDisponibleException {
         biblioteca.registrarPrestamo(idUsuario, codigoLibro);
     }
 
